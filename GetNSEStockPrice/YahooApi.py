@@ -10,7 +10,7 @@ import json
 from datetime import datetime
 from dateutil import tz
 import requests
-from ApiBase import ApiBase
+from .ApiBase import ApiBase
 class YahooApi(ApiBase):
     def __init__(self):
         """
@@ -31,8 +31,8 @@ class YahooApi(ApiBase):
         url = self.url_endpoint+','.join(scrip_string)+'/quote?format=json'
         resp = requests.get(url)
         if resp.status_code != requests.codes.ok:
-            print >> sys.stderr, 'YAHOO API ERROR'
-            print >> sys.stderr, resp.json
+            print('YAHOO API ERROR', file=sys.stderr)
+            print(resp.json, file=sys.stderr)
             raise Exception('YAHOO API ERROR')
         return resp
 

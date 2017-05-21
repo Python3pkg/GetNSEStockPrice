@@ -11,7 +11,7 @@
 import sys
 import json
 import requests
-from ApiBase import ApiBase
+from .ApiBase import ApiBase
 class GoogleApi(ApiBase):
     def __init__(self):
         """
@@ -32,8 +32,8 @@ class GoogleApi(ApiBase):
         url = self.url_endpoint+','.join(scrip_string)
         resp = requests.get(url)
         if resp.status_code != requests.codes.ok:
-            print >> sys.stderr, 'GOOGLE API ERROR'
-            print >> sys.stderr, resp.json
+            print('GOOGLE API ERROR', file=sys.stderr)
+            print(resp.json, file=sys.stderr)
             raise Exception('GOOGLE API ERROR')
         return resp
     def process_response(self, text_responses):
@@ -59,8 +59,8 @@ class GoogleApi(ApiBase):
                                        'change_pc':change_in_pc
                                       }
                     stock_data[stock['t']] = temp_stock_dict
-                except Exception, exception_obj:
-                    print >> sys.stderr, "Error Parsing Google Response"
-                    print >> sys.stderr, exception_obj
+                except Exception as exception_obj:
+                    print("Error Parsing Google Response", file=sys.stderr)
+                    print(exception_obj, file=sys.stderr)
                     raise Exception('Error Parsing Google Response')
         return stock_data

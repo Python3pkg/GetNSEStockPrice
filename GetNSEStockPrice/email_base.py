@@ -2,7 +2,7 @@ import sys
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from config import config
+from .config import config
 
 def send_mail(message,receivers=config['smtp_receivers']):
     """
@@ -13,9 +13,9 @@ def send_mail(message,receivers=config['smtp_receivers']):
         uses options from config.py
     """
     sender = config['smtp_sender']
-    print sender
-    print receivers
-    print message
+    print(sender)
+    print(receivers)
+    print(message)
     try:
         smtpObj = smtplib.SMTP_SSL(config['smtp_server'],config['smtp_port'])
         smtpObj.login(config['smtp_login'],config['smtp_password'])
@@ -24,9 +24,9 @@ def send_mail(message,receivers=config['smtp_receivers']):
         smtpObj.sendmail(sender, receivers, message)
         smtpObj.quit()
         return True 
-    except Exception, exc:
-         print >> sys.stderr, "Exception From email_base"
-         print >> sys.stderr, exc 
+    except Exception as exc:
+         print("Exception From email_base", file=sys.stderr)
+         print(exc, file=sys.stderr) 
          return False
 if __name__ == '__main__':
     send_mail('Test message')

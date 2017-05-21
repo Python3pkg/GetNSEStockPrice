@@ -1,7 +1,7 @@
 import sys
 import argparse
-from GoogleApi import GoogleApi
-from YahooApi import YahooApi
+from .GoogleApi import GoogleApi
+from .YahooApi import YahooApi
 #import email_base
 parser = argparse.ArgumentParser(description='Gets stock prices of scrips listed in NSE')
 parser.add_argument('scrips', metavar='s',
@@ -15,7 +15,7 @@ def get_stock_price(scrips, api_preference='Google', retries=0):
     """
     api_obj = None
     if retries > MAX_RETRIES:
-        print >> sys.stderr, "Retries exceeded"
+        print("Retries exceeded", file=sys.stderr)
         return None
     if api_preference == 'Google':
         api_obj = GoogleApi()
@@ -24,7 +24,7 @@ def get_stock_price(scrips, api_preference='Google', retries=0):
     scrip_data = None
     try:
         scrip_data = api_obj.get_data(scrips)
-    except Exception, err_msg:
+    except Exception as err_msg:
         email_base.send_mail('%s API call failed with error msg %s'%(api_preference, err_msg))
         if api_preference == 'Google':
             return get_stock_price(scrips, api_preference='Yahoo', retries=retries+1)
@@ -34,4 +34,4 @@ def get_stock_price(scrips, api_preference='Google', retries=0):
 
 if __name__ == '__main__':
     args = parser.parse_args()
-    print get_stock_price (args.scrips.split(','))
+    print(get_stock_price (args.scrips.split(',')))
